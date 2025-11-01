@@ -1,23 +1,25 @@
 /* ========================================
-   Base Styles & Theme
+   Variables & Themes
 ======================================== */
 :root {
   --primary-teal: #00bfa5;
   --primary-blue: #1e88e5;
   --primary-gold: #ffca28;
-  --light-bg: #f9f9f9;
-  --dark-bg: #121212;
+  --light-bg: #f5f5f5;
+  --dark-bg: #111;
   --light-text: #222;
   --dark-text: #eee;
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--light-bg);
   color: var(--light-text);
-  transition: all 0.4s ease;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  transition: all 0.5s ease;
 }
 
 body.dark {
@@ -33,40 +35,46 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 3rem;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.05);
+  transition: background 0.3s ease;
 }
 
 nav ul {
-  list-style: none;
   display: flex;
+  list-style: none;
   gap: 2rem;
 }
 
 nav a {
   text-decoration: none;
   color: inherit;
-  font-weight: bold;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-nav a:hover {
-  color: var(--primary-teal);
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--primary-gold);
+  transition: 0.3s;
 }
 
-nav .logo img {
-  width: 40px;
-  height: 40px;
-  vertical-align: middle;
-  margin-right: 0.5rem;
+nav a:hover::after {
+  width: 100%;
 }
 
 #theme-toggle {
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   background: none;
   border: none;
 }
@@ -75,136 +83,3 @@ nav .logo img {
    Hero Section
 ======================================== */
 .hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 90vh;
-  background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
-  color: white;
-}
-
-.hero-title {
-  font-size: 3rem;
-  animation: fadeInUp 1.5s ease forwards;
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  margin: 1rem 0;
-  animation: fadeInUp 2s ease forwards;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  background: var(--primary-gold);
-  border: none;
-  border-radius: 5px;
-  color: #121212;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.btn:hover {
-  transform: scale(1.05);
-}
-
-/* ========================================
-   Sections
-======================================== */
-section {
-  padding: 5rem 3rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-h2 {
-  color: var(--primary-blue);
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.about-preview p,
-.mission p,
-.operations p,
-.team p {
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-/* Cards */
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  margin: 1rem 0;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-/* Team Cards */
-.team-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.team-card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  width: 200px;
-  text-align: center;
-  padding: 1rem;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.team-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 2rem;
-  background: #222;
-  color: #eee;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(50px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Google Form Embed */
-iframe {
-  width: 100%;
-  height: 600px;
-  border: none;
-}
-
-/* Responsive */
-@media(max-width:768px){
-  nav ul {
-    flex-direction: column;
-    display: none;
-  }
-  nav ul.show {
-    display: flex;
-  }
-  .team-container {
-    flex-direction: column;
-    align-items: center;
-  }
-}
