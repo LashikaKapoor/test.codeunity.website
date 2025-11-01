@@ -1,261 +1,86 @@
-/* ----------------------
-  GENERAL RESET
------------------------ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-  scroll-behavior: smooth;
+// ----------------------
+// PARTICLES BACKGROUND
+// ----------------------
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+
+class Particle {
+  constructor(x, y, size, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+  }
+  draw() {
+    ctx.fillStyle = "rgba(0, 255, 209,0.7)";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
 
-body {
-  background-color: #0B1F3F; /* Dark blue base */
-  color: #E0E0E0;
-  overflow-x: hidden;
-  transition: all 0.5s ease;
+function initParticles() {
+  particlesArray = [];
+  let number = 100;
+  for (let i = 0; i < number; i++) {
+    let size = Math.random() * 3 + 1;
+    let x = Math.random() * canvas.width;
+    let y = Math.random() * canvas.height;
+    let speedX = (Math.random() - 0.5) * 1.5;
+    let speedY = (Math.random() - 0.5) * 1.5;
+    particlesArray.push(new Particle(x, y, size, speedX, speedY));
+  }
 }
+initParticles();
 
-a {
-  text-decoration: none;
-  color: inherit;
+function animateParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for (let i = 0; i < particlesArray.length; i++){
+    particlesArray[i].update();
+    particlesArray[i].draw();
+  }
+  requestAnimationFrame(animateParticles);
 }
+animateParticles();
 
-header {
-  background-color: #0B1F3F;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
+window.addEventListener("resize", function() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initParticles();
+});
 
-header .logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #00FFD1;
-  text-shadow: 0 0 10px #00FFD1, 0 0 20px #00FFD1;
-}
+// ----------------------
+// SCROLL ANIMATIONS
+// ----------------------
+const sections = document.querySelectorAll("section");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+    }
+  });
+},{threshold: 0.2});
 
-header nav a {
-  margin-left: 1.5rem;
-  font-weight: 500;
-  transition: 0.3s;
-}
+sections.forEach(section => {
+  section.classList.add("hidden");
+  observer.observe(section);
+});
 
-header nav a:hover {
-  color: #FFD700; /* Gold accent */
-  text-shadow: 0 0 5px #FFD700;
-}
-
-#theme-toggle {
-  margin-left: 1rem;
-  padding: 0.5rem;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  background-color: #0B1F3F;
-  color: #00FFD1;
-  font-size: 1.2rem;
-  transition: 0.5s;
-}
-
-#theme-toggle:hover {
-  color: #FFD700;
-}
-
-/* ----------------------
-  HERO SECTION
------------------------ */
-.hero {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-content {
-  text-align: center;
-  z-index: 5;
-}
-
-.hero-title {
-  font-size: 4rem;
-  color: #00FFD1;
-  text-shadow: 0 0 15px #00FFD1, 0 0 30px #00FFD1;
-  animation: glowText 2s infinite alternate;
-}
-
-.hero-subtitle {
-  font-size: 1.8rem;
-  margin: 1rem 0;
-  color: #FFD700;
-  text-shadow: 0 0 5px #FFD700, 0 0 15px #FFD700;
-  animation: glowTextSub 3s infinite alternate;
-}
-
-.btn {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #0B1F3F;
-  background: linear-gradient(90deg, #00FFD1, #00BFFF, #FFD700);
-  background-size: 200% 200%;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  animation: gradientMove 3s ease infinite;
-  box-shadow: 0 0 15px #00FFD1, 0 0 30px #FFD700;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px #00FFD1, 0 0 50px #FFD700;
-}
-
-/* ----------------------
-  PARTICLES CANVAS
------------------------ */
-#particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* ----------------------
-  SECTIONS
------------------------ */
-section {
-  padding: 6rem 10%;
-  min-height: 100vh;
-}
-
-h2 {
-  font-size: 2.8rem;
-  margin-bottom: 1rem;
-  color: #00FFD1;
-  text-shadow: 0 0 5px #00FFD1;
-}
-
-h3 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #FFD700;
-}
-
-p {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  margin-bottom: 1rem;
-  color: #E0E0E0;
-}
-
-/* ----------------------
-  CARDS
------------------------ */
-.card {
-  display: inline-block;
-  background: #0B1F3F;
-  border: 2px solid #00FFD1;
-  border-radius: 15px;
-  padding: 2rem;
-  margin: 1rem;
-  width: 300px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-10px) rotateZ(-1deg);
-  box-shadow: 0 0 25px #00FFD1, 0 0 50px #FFD700;
-}
-
-/* ----------------------
-  TEAM CARDS
------------------------ */
-.team-cards {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.team-card {
-  background: #0B1F3F;
-  border: 2px solid #FFD700;
-  border-radius: 15px;
-  padding: 2rem;
-  width: 250px;
-  text-align: center;
-  margin: 1rem;
-  transition: 0.3s;
-}
-
-.team-card:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #00FFD1, 0 0 40px #FFD700;
-}
-
-/* ----------------------
-  FOOTER
------------------------ */
-footer {
-  background-color: #0B1F3F;
-  text-align: center;
-  padding: 2rem 0;
-  color: #E0E0E0;
-  box-shadow: inset 0 4px 15px rgba(0,0,0,0.3);
-}
-
-/* ----------------------
-  ANIMATIONS
------------------------ */
-@keyframes glowText {
-  0% { text-shadow: 0 0 5px #00FFD1, 0 0 15px #00BFFF; }
-  50% { text-shadow: 0 0 25px #00FFD1, 0 0 50px #00BFFF; }
-  100% { text-shadow: 0 0 5px #00FFD1, 0 0 15px #00BFFF; }
-}
-
-@keyframes glowTextSub {
-  0% { text-shadow: 0 0 3px #FFD700, 0 0 10px #FFD700; }
-  50% { text-shadow: 0 0 15px #FFD700, 0 0 30px #FFD700; }
-  100% { text-shadow: 0 0 3px #FFD700, 0 0 10px #FFD700; }
-}
-
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ----------------------
-  LIGHT MODE
------------------------ */
-body.light-mode {
-  background-color: #E0E0E0;
-  color: #0B1F3F;
-}
-
-body.light-mode header, body.light-mode footer, body.light-mode .card, body.light-mode .team-card {
-  background-color: #D0E8FF;
-  color: #0B1F3F;
-}
-
-body.light-mode .hero-title {
-  color: #0B1F3F;
-  text-shadow: 0 0 10px #0B1F3F;
-}
-
-body.light-mode .hero-subtitle {
-  color: #0057FF;
-  text-shadow: 0 0 5px #0057FF;
-}
+// ----------------------
+// DARK/LIGHT MODE TOGGLE
+// ----------------------
+const themeBtn = document.getElementById("theme-toggle");
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+});
